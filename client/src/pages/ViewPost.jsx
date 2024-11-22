@@ -1,9 +1,10 @@
-import { useState, useEffect, useParams } from "react";
+import { useState, useEffect } from "react";
 import BlogPost from "../components/BlogPost";
+import { useParams } from "react-router-dom";
 
 const ViewPost = () => {
-  const id = useParams();
-  const [post, setPost] = useState({});
+  const {id} = useParams();
+  const [post, setPost] = useState(null);
 
   useEffect(() => {
     // Temporary data for testing
@@ -33,12 +34,13 @@ const ViewPost = () => {
     };
 
     setPost(initialPost);
-  }, [id]);
+  }, []);
 
   return (
     <div>
       <h1>hello there</h1>
-      <BlogPost post={post} />
+  
+      {post && <BlogPost post={post} />}
     </div>
   );
 };
