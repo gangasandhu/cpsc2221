@@ -3,13 +3,14 @@ import { FaRegComment } from "react-icons/fa";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 const BlogPost = ({ post, comments }) => {
-  // TODO: for connection to backend
   const [newComment, setNewComment] = useState("");
   const [allComments, setAllComments] = useState(comments);
   const [isFollowing, setIsFollowing] = useState(post.isFollowing || false);
   const navigate = useNavigate();
+  const { user } = useUser();
 
   // This function is for adding a new comment to the post
   // TODO: for connection to backend
@@ -62,23 +63,26 @@ const BlogPost = ({ post, comments }) => {
           </div>
 
           {/* Follow user button */}
-          {/* TODO: make this button functional according to if the user is logged in or not */}
-          <button
-            className={`border-2 border-solid px-3 py-2 w-28 rounded-3xl font-semibold ${
-              isFollowing
-                ? "border-gray-500 text-gray-500"
-                : "border-blue-500 text-blue-500"
-            }`}
-            onClick={toggleFollow}
-          >
-            {isFollowing ? "Unfollow" : "Follow"}
-          </button>
+          {user && user.id !== post.userID && (
+            <button
+              className={`border-2 border-solid px-3 py-2 w-28 rounded-3xl font-semibold ${
+                isFollowing
+                  ? "border-gray-500 text-gray-500"
+                  : "border-blue-500 text-blue-500"
+              }`}
+              onClick={toggleFollow}
+            >
+              {isFollowing ? "Unfollow" : "Follow"}
+            </button>
+          )}
         </div>
 
         {/* Edit post button */}
-        <button className="text-2xl" onClick={handleEdit}>
-          <IoIosMore />
-        </button>
+        {user && user.id === post.userID && (
+          <button className="text-2xl" onClick={handleEdit}>
+            <IoIosMore />
+          </button>
+        )}
       </div>
 
       <div className="flex flex-col gap-y-4">
