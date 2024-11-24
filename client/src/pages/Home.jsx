@@ -6,11 +6,11 @@ import axios from "axios";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
-  // TODO: connection to the backend
+  // TODO: for connection to backend
   // const [loading, setLoading] = useState(true);
   // const [error, setError] = useState(null);
 
-  // TODO: connection to the backend
+  // TODO: for connection to backend
   /**
    * Assuming this backend API structure
    * [
@@ -30,7 +30,7 @@ const Home = () => {
    */
 
   useEffect(() => {
-    // TODO: connection to the backend
+    // TODO: for connection to backend
     // const fetchPosts = async () => {
     //   try {
     //     setLoading(true);
@@ -44,7 +44,7 @@ const Home = () => {
     // };
     // fetchPosts();
 
-    // Temporary data for testing
+    // TODO: delete this temporary testing data once the connection to the backend is established
     const initialPosts = [
       {
         postID: 1,
@@ -166,10 +166,11 @@ const Home = () => {
       },
     ];
 
+    // TODO: delete this once the connection to the backend is established
     setPosts(initialPosts);
   }, []);
 
-  // TODO: connection to backend
+  // TODO: for connection to backend
   // if (loading) return <div>Loading...</div>;
   // if (error) return <div>{error}</div>;
 
@@ -182,11 +183,15 @@ const Home = () => {
 
       <ul className="p-4 flex flex-wrap gap-4 justify-center">
         <li>
-          {/* TODO: make this button add a new */}
-          <button className="px-4 py-3 rounded border-2 border-blue-400 flex gap-x-2 w-96 h-full text-blue-400 justify-center items-center">
-            Add a post <IoMdAddCircle className="text-3xl" />
-          </button>
+          {/* Link to add a new post */}
+          <Link to="/EditPost">
+            <button className="px-4 py-3 rounded border-2 border-blue-400 flex gap-x-2 w-96 h-full text-blue-400 justify-center items-center">
+              Add a post <IoMdAddCircle className="text-3xl" />
+            </button>
+          </Link>
         </li>
+
+        {/* All of the posts */}
         {posts.map((post) => (
           <li key={post.postID}>
             <Link to={`/ViewPost/${post.postID}`}>

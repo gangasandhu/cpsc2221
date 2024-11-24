@@ -7,11 +7,11 @@ const ViewPost = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
-  // TODO: connect to backend
+  // TODO: for connection to backend
   // const [loading, setLoading] = useState(true);
   // const [error, setError] = useState(null);
 
-  /** TODO: connect to backend
+  /** TODO: for connection to backend
    * Assuming this backend API structure
    * {
   "post": {
@@ -45,7 +45,7 @@ const ViewPost = () => {
    */
 
   useEffect(() => {
-    // TODO: connect to backend
+    // TODO: for connection to backend
     // const fetchPostData = async () => {
     //   try {
     //     setLoading(true);
@@ -60,7 +60,7 @@ const ViewPost = () => {
     // };
     // fetchPostData();
 
-    // Temporary data for testing
+    // TODO: delete this temporary testing data once connection to backend is established
     const initialPost = {
       postID: 1,
       userID: 1,
@@ -127,7 +127,7 @@ const ViewPost = () => {
         date: "03:10 PM • 21/11/2024",
       },
     ];
-
+    // TODO: delete this once connection to the backend is established
     setPost(initialPost);
     setComments(initialComments);
   }, []);
