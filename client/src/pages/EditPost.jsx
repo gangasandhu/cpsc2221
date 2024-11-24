@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const EditPost = () => {
@@ -7,6 +8,7 @@ const EditPost = () => {
   const [post, setPost] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     // TODO: for connection to the backend
@@ -35,11 +37,16 @@ const EditPost = () => {
     // try {
     //   await axios.post(`/api/editPost.php`, updatedPost);
     //   alert("Post updated successfully!");
+    //   navigate(`/post/${id}`);
     // } catch (error) {
     //   console.error("Failed to save the post", error);
     //   alert("Failed to save the post. Try again");
     // }
   };
+
+  if (!post) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="p-6 bg-zinc-100 min-h-screen">
