@@ -32,12 +32,12 @@ const HomePost = ({ post }) => {
       </div>
 
       <div className="flex flex-col gap-y-4">
-        <p className="h-20">
-          {truncateText(post.content, maxLength)}
-        </p>
+        <div>
+          <h2 className="text-lg font-bold">{post.title}</h2>
+          <p className="h-20">{truncateText(post.content, maxLength)}</p>
+        </div>
         <p className="text-gray-500">
-          {post.datePublished}{" "}
-          {/* TODO: To include Views */}
+          {post.datePublished} {/* TODO: To include Views */}
           {/* <span className="font-bold text-black">{post.views}</span> Views */}
         </p>
       </div>

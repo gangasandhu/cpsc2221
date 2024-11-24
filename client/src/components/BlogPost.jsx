@@ -27,6 +27,7 @@ const BlogPost = ({ post, comments }) => {
       </div>
 
       <div className="flex flex-col gap-y-4">
+        <h2 className="text-lg font-bold">{post.title}</h2>
         <p className="whitespace-pre-wrap">{post.content}</p>
       </div>
 
