@@ -31,12 +31,6 @@ const Navbar = () => {
               Home
             </Link>
             <Link
-              to="/posts"
-              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Posts
-            </Link>
-            <Link
               to="/codeedit"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
@@ -83,11 +77,11 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          to="/settings"
+                          to="/dashboard"
                           className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                           onClick={() => setIsDropdownOpen(false)}
                         >
-                          Settings
+                          Your Posts
                         </Link>
                       </li>
                       <li>

@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import BlogPost from "../components/BlogPost";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { getPostById } from "../services/postsApi.js";
 
-const ViewPost = () => {
+const ViewPost = ({posts}) => {
   const { id } = useParams();
+  console.log(posts)
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   // TODO: for connection to backend
@@ -61,16 +63,7 @@ const ViewPost = () => {
     // fetchPostData();
 
     // TODO: delete this temporary testing data once connection to backend is established
-    const initialPost = {
-      postID: 1,
-      userID: 1,
-      username: "@username",
-      email: "user@email.com",
-      title: "Post",
-      content:
-        "Lorem ipsum dolor sit amet. Ab esse commodi sed blanditiis cupiditate id aliquam consequatur ut internos quaerat ut rerum rerum. Qui odit vero sit laudantium blanditiis ut voluptatem dolorem et quam possimus sed libero mollitia. Ad exercitationem accusamus cum inventore doloremque in dolor consequatur rem aliquid aperiam nam enim architecto aut eveniet tempore ea incidunt quae.\n\nAut nostrum nemo est assumenda ipsam ex nihil doloribus. Qui cupiditate nobis est illum praesentium ut suscipit reiciendis ut molestias laudantium hic repudiandae quidem id error dignissimos ut soluta enim. \n\nSed dolorum sunt ut nesciunt omnis et voluptatem corporis ut doloremque necessitatibus ut dolorum facilis? Non odit voluptatem et reprehenderit quia est omnis ducimus sit numquam nesciunt aut fugiat dolor qui dolor dolore!",
-      datePublished: "12:11 PM • 21/11/2024",
-    };
+    
     const initialComments = [
       {
         commentID: 1,
@@ -128,7 +121,10 @@ const ViewPost = () => {
       },
     ];
     // TODO: delete this once connection to the backend is established
-    setPost(initialPost);
+   
+    const post = getPostById(posts, parseInt(id))
+    console.log(post)
+    setPost(post);
     setComments(initialComments);
   }, []);
 
