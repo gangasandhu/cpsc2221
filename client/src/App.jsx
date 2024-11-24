@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import AuthPage from './pages/AuthPage';
 import ViewPost from './pages/ViewPost';
 import CodePage from './pages/CodePage';
+import ProfilePage from './pages/ProfilePage';
 
 
 function App() {
@@ -17,6 +18,8 @@ function App() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/ViewPost/:id" element={<ViewPost />} />
         <Route path="/codeedit" element={<CodePage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+
 
 
       </Routes>

@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { useUser } from "../context/UserContext";
-
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  // Simulating user login state
-  //   const [user, setUser] = useState({name: "Ganga"}); // Replace with actual user state from your app
-  const {user, setUser} = useUser(); // Replace with actual user state from your app
+  const { user, setUser } = useUser(); // User context
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleLogout = () => {
     setUser(null); // Clears the user state on logout
+    setIsDropdownOpen(false); // Close dropdown after logout
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
 
   return (
     <nav className="bg-gray-800">
@@ -21,72 +24,96 @@ const Navbar = () => {
 
           {/* Navigation Links */}
           <div className="hidden sm:flex space-x-4">
-            <a
-              href="/"
+            <Link
+              to="/"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
               Home
-            </a>
-            <a
-              href="/posts"
+            </Link>
+            <Link
+              to="/posts"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
-              posts
-            </a>
-            
-            <a
-              href="/codeedit"
+              Posts
+            </Link>
+            <Link
+              to="/codeedit"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
               Code Editor
-            </a>
-
-            <a
-              href="/about"
+            </Link>
+            <Link
+              to="/about"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
               About
-            </a>
+            </Link>
           </div>
 
           {/* Login/Register or User Avatar */}
-          <div className="flex items-center space-x-4">
+          <div className="relative">
             {user ? (
-              <div className="flex items-center space-x-4">
-                {/* Avatar */}
-                <div
-                  className="h-8 w-8 flex items-center justify-center rounded-full bg-gray-600 text-white font-medium"
-                  title={user.name}
-                >
-                  {user.name[0].toUpperCase()}
+              <div>
+                <div className="flex items-center space-x-4">
+                  {/* Avatar */}
+                  <div
+                    className="h-8 w-8 flex items-center justify-center rounded-full bg-gray-600 text-white font-medium cursor-pointer"
+                    title={user.name}
+                    onClick={toggleDropdown}
+                  >
+                    {user.name[0].toUpperCase()}
+                  </div>
+                  <span className="text-gray-300 ml-2 text-sm font-medium">
+                    {user.name}
+                  </span>
+                  {/* Dropdown */}
+
                 </div>
-                <span className="text-gray-300 ml-2 text-sm font-medium">
-                  {user.name}
-                </span>
-                {/* Logout Button */}
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-500 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Logout
-                </button>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10">
+                    <ul className="py-2">
+                      <li>
+                        <Link
+                          to="/profile"
+                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/settings"
+                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          Settings
+                        </Link>
+                      </li>
+                      <li>
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        >
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+
+                )}
               </div>
             ) : (
-              <div className="flex space-x-4">
-                <a
-                  href="/auth"
-                  className="text-gray-300 bg-gray-600 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Login
-                </a>
-
-              </div>
+              <Link
+                to="/auth"
+                className="text-gray-300 bg-gray-600 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Login
+              </Link>
             )}
           </div>
         </div>
       </div>
-
-
     </nav>
   );
 };
