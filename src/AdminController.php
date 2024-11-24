@@ -1,8 +1,8 @@
 <?php
 
-class UserController
+class AdminController
 {
-    public function __construct(private UserGateway $gateway)
+    public function __construct(private AdminGateway $gateway)
     {
     }
     
@@ -21,16 +21,16 @@ class UserController
     
     private function processResourceRequest(string $method, string $id): void
     {
-        $user = $this->gateway->get($id);
-        if ( ! $user) {
+        $admin = $this->gateway->get($id);
+        if ( ! $admin) {
             http_response_code(404);
-            echo json_encode(["message" => "User not found"]);
+            echo json_encode(["message" => "admin not found"]);
             return;
         }
         
         switch ($method) {
             case "GET":
-                echo json_encode($user);
+                echo json_encode($admin);
                 break;
                 
             case "PATCH":
@@ -44,26 +44,18 @@ class UserController
                     break;
                 }
                 
-                $rows = $this->gateway->update($user, $data);
+                $rows = $this->gateway->update($admin, $data);
                 
                 echo json_encode([
-                    "message" => "User $id updated",
+                    "message" => "admin $id updated",
                     "rows" => $rows
                 ]);
-                break;
-                
-            case "DELETE":
-                $rows = $this->gateway->delete($id);
-                
-                echo json_encode([
-                    "message" => "User $id deleted",
-                    "rows" => $rows
-                ]);
-                break;
+                break;         
+
                 
             default:
                 http_response_code(405);
-                header("Allow: GET, PATCH, DELETE");
+                header("Allow: GET, PATCH");
         }
     }
     
@@ -74,29 +66,10 @@ class UserController
                 echo json_encode($this->gateway->getAll());
                 break;
                 
-            case "POST":
-                $data = (array) json_decode(file_get_contents("php://input"), true);
-                
-                $errors = $this->getValidationErrors($data);
-                
-                if ( ! empty($errors)) {
-                    http_response_code(422);
-                    echo json_encode(["errors" => $errors]);
-                    break;
-                }
-                
-                $id = $this->gateway->create($data);
-                
-                http_response_code(201);
-                echo json_encode([
-                    "message" => "User created",
-                    "id" => $id
-                ]);
-                break;
-            
+     
             default:
                 http_response_code(405);
-                header("Allow: GET, POST");
+                header("Allow: GET");
         }
     }
     
@@ -104,18 +77,10 @@ class UserController
     {
         $errors = [];
         
-        if ($is_new && empty($data["username"])) {
-            $errors[] = "username is required";
+        if ($is_new && empty($data["permissions"])) {
+            $errors[] = "permissions are required";
         }
-        if ($is_new && empty($data["email"])) {
-            $errors[] = "email is required";
-        }
-        if ($is_new && empty($data["password"])) {
-            $errors[] = "password is required";
-        }
-        if ($is_new && empty($data["userType"])) {
-            $errors[] = "userType is required";
-        }
+
         
         if (array_key_exists("userID", $data)) {
             if (filter_var($data["userID"], FILTER_VALIDATE_INT) === false) {

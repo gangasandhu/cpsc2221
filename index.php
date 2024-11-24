@@ -13,32 +13,18 @@ header("Content-type: application/json; charset=UTF-8");
 
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
-echo "Connection successful";
+    if ($parts[2] != "users") {
+        http_response_code(404);
+        exit;
+    }
 
-if ($parts[1] != "products") {
-    http_response_code(404);
-    exit;
-}
+$id = $parts[3] ?? null;
 
-$id = $parts[2] ?? null;
 
-$database = new Database("localhost", "devlink", "root", "");
+$database = new Database("localhost", "DevLink_db", "root", "");
 
-$gateway = new ProductGateway($database);
+$gateway = new userGateway($database);
 
-$controller = new ProductController($gateway);
+$controller = new UserController($gateway);
 
 $controller->processRequest($_SERVER["REQUEST_METHOD"], $id);
-
-
-
-
-
-
-
-
-
-
-
-
-
