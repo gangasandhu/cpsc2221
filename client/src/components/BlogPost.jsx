@@ -4,7 +4,7 @@ import { FaRegComment } from "react-icons/fa";
 // This is named wrong. It's supposed to be for ViewBlog page. I will move this code to later.
 const BlogPost = ({ post, comments }) => {
   return (
-    <div className="px-8 py-4 pb-6 rounded bg-white drop-shadow-md flex flex-col gap-4">
+    <div className="px-8 py-4 pb-6 rounded bg-white drop-shadow-md flex flex-col gap-4 max-w-4xl mx-auto">
       <div className="flex justify-between">
         <div className="flex gap-x-2 items-center">
           {/* <img
