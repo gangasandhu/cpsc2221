@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CodeEditor from '../components/CodeEditor';
 import OutputBox from '../components/OutputBox';
 import { getOutputStatus, getOutputToken } from '../services/compileApi';
@@ -7,14 +7,44 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditorConfig from '../components/EditorConfig';
 import '../styles/home.css';
+import axios from 'axios';
+import { useUser } from "../context/UserContext";
+
 
 const CodePage = () => {
   // code editor states
-  const [value, setValue] = useState("// write your code here");
+  const { user } = useUser();
+  const [value, setValue] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState(languageOptions[0]);
   const [processing, setProcessing] = useState(null);
   const [customInput, setCustomInput] = useState("");
   const [outputDetails, setOutputDetails] = useState("");
+
+  useEffect(() => {
+    const fetchSavedCode = async () => {
+      try {
+        // Fetch all codes from the backend
+        const response = await axios.get("http://localhost/cpsc2221/code");
+        const allCodes = response.data;
+        console.log(allCodes)
+        // Filter by the current user's userID and sort by most recent
+        const userCodes = allCodes
+          .filter((code) => code.userID === user.userID); // Assuming `dateSaved` exists
+
+          console.log(userCodes)
+        // Set the value to the most recent code, if available
+        if (userCodes.length > 0) {
+          setValue(userCodes[userCodes.length - 1].content); // Assuming `codeContent` is the code field
+        }
+      } catch (error) {
+        console.error("Failed to fetch saved codes:", error);
+      }
+    };
+
+    if (user) {
+      fetchSavedCode();
+    }
+  }, [user]);
 
   const handleEditorChange = (value) => {
     setValue(value);

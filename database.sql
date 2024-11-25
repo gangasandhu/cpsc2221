@@ -60,3 +60,12 @@ CREATE TABLE Comment (
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 );
+
+CREATE TABLE Code (
+    codeID INT AUTO_INCREMENT PRIMARY KEY, 
+    userID INT NOT NULL,                          
+    content TEXT NOT NULL,              
+    language TEXT NOT NULL,  
+    datePublished DATETIME DEFAULT CURRENT_TIMESTAMP, 
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE
+);

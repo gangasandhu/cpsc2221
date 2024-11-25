@@ -65,6 +65,11 @@ switch ($parts[2]) {
         $controller = new CommentController($gateway);
         break;
 
+    case "code":
+        $gateway = new CodeGateway($database);
+        $controller = new CodeController($gateway);
+        break;
+
     default:
         http_response_code(404);
         exit;
