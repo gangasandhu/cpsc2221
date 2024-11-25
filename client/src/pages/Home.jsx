@@ -23,7 +23,7 @@ const Home = ({posts}) => {
       <ul className="p-4 flex flex-wrap gap-4 justify-center">
         {user && <li>
           {/* Link to add a new post */}
-          <Link to="/EditPost">
+          <Link to="/addPost">
             <button className="px-4 py-3 rounded border-2 border-blue-400 flex gap-x-2 w-96 h-full text-blue-400 justify-center items-center">
               Add a post <IoMdAddCircle className="text-3xl" />
             </button>

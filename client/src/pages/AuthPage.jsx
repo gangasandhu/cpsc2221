@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom"
+import axios from "axios";
 
 const AuthPage = () => {
   const { setUser } = useUser(); // Only updates user data
@@ -9,7 +10,7 @@ const AuthPage = () => {
 
   const [isLogin, setIsLogin] = useState(true); // Toggle between login and register
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -21,7 +22,7 @@ const AuthPage = () => {
 
   const handleToggle = () => {
     setIsLogin((prev) => !prev);
-    setFormData({ name: "", email: "", password: "" });
+    setFormData({ username: "", email: "", password: "" });
     setError("");
   };
 
@@ -37,15 +38,15 @@ const AuthPage = () => {
         console.log("Calling login API with:", formData);
         // Example: const response = await axios.post('/api/login', { email: formData.email, password: formData.password });
         // On successful login:
-        setUser({ name: "Mock User", email: formData.email }); // Replace with response data
-        alert("Logged in successfully!");
+        setUser({ userID: 123456789, name: "Test", email: formData.email }); // Replace with response data
       } else {
         // API call to register endpoint
-        console.log("Calling register API with:", formData);
-        // Example: const response = await axios.post('/api/register', formData);
+        const id = Math.floor(Math.random() * 1_000_000);
+        console.log("Calling register API with:", {...formData, userID: id, userType: 'member'});
+        const response = await axios.post('http://localhost/cpsc2221/users', {...formData, userID: id, userType: 'member', interest: 'programming', verified: 0});
         // On successful registration:
-        setUser({ name: formData.name, email: formData.email }); // Replace with response data
-        alert("Registered successfully!");
+        setUser({ userID: id, name: formData.username, email: formData.email }); // Replace with response data
+        
       }
 
       navigate("/");
@@ -79,8 +80,8 @@ const AuthPage = () => {
               </label>
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 placeholder="Enter your name"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
