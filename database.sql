@@ -37,3 +37,12 @@ FOREIGN KEY (followerID) REFERENCES Users(userID)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 );
+
+CREATE TABLE Posts (
+    postID INT AUTO_INCREMENT PRIMARY KEY, 
+    userID INT NOT NULL,                   
+    title VARCHAR(255) NOT NULL,           
+    content TEXT NOT NULL,                
+    datePublished DATETIME DEFAULT CURRENT_TIMESTAMP, 
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE
+);

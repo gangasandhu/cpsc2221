@@ -9,7 +9,17 @@ spl_autoload_register(function ($class) {
 set_error_handler("ErrorHandler::handleError");
 set_exception_handler("ErrorHandler::handleException");
 
+// Handle CORS headers
+header("Access-Control-Allow-Origin: *"); // Allow all origins
+header("Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS"); // Allow specific HTTP methods
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Allow specific headers
 header("Content-type: application/json; charset=UTF-8");
+
+// Handle preflight (OPTIONS) requests
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+    http_response_code(204); // No Content
+    exit(0);
+}
 
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
@@ -43,6 +53,11 @@ switch ($parts[2]) {
     case "follow":
         $gateway = new FollowGateway($database);
         $controller = new FollowController($gateway);
+        break;
+
+    case "posts":
+        $gateway = new PostGateway($database);
+        $controller = new PostController($gateway);
         break;
 
     default:
