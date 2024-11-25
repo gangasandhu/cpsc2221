@@ -5,32 +5,32 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
-const BlogPost = ({ post, comments }) => {
+const BlogPost = ({ post, comments, setComments }) => {
   const [newComment, setNewComment] = useState("");
-  const [allComments, setAllComments] = useState(comments);
+  // const [allComments, setAllComments] = useState([]);
   const [isFollowing, setIsFollowing] = useState(post.isFollowing || false);
   const navigate = useNavigate();
   const { user } = useUser();
 
   // This function is for adding a new comment to the post
   // TODO: for connection to backend
-  // const addComment = async () => {
-  //   if (!newComment.trim()) return;
+  const addComment = async () => {
+    if (!newComment.trim()) return;
 
-  //   try {
-  //     const response = await axios.post(`/api/comments`, {
-  //       postID: post.postID,
-  //       userID: post.userID,
-  //       username: post.username,
-  //       content: newComment,
-  //     });
+    try {
+      const savedComment = {
+        postID: post.postID,
+        userID: post.userID,
+        content: newComment,
+      }
+      const response = await axios.post(`http://localhost/cpsc2221/comments`, savedComment);
 
-  //     setAllComments((prevComments) => [...prevComments, response.data]);
-  //     setNewComment("");
-  //   } catch (error) {
-  //     console.error("Failed to add comment:", error);
-  //   }
-  // };
+      setComments((prevComments) => [...prevComments, {...savedComment, username: user.name}]);
+      setNewComment("");
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+    }
+  };
 
   // This function is to update the follow user button
   const toggleFollow = async () => {
@@ -99,7 +99,7 @@ const BlogPost = ({ post, comments }) => {
           <li>
             <button className="flex items-center gap-x-1">
               <FaRegComment className="text-xl" />
-              <p>{allComments.length}</p>
+              <p>{comments.length}</p>
             </button>
           </li>
         </ul>
@@ -117,7 +117,7 @@ const BlogPost = ({ post, comments }) => {
           />
           <button
             // TODO: for connection to backend
-            // onClick={addComment}
+            onClick={addComment}
             className="border-2 border-solid border-gray-500 px-2 py-1 rounded-3xl text-gray-500 font-semibold"
           >
             Add

@@ -31,7 +31,7 @@ $parts = explode("/", $_SERVER["REQUEST_URI"]);
 $id = $parts[3] ?? null;
 
 
-$database = new Database("localhost", "DevLink_db", "root", "");
+$database = new Database("localhost", "DevLink_db", "root", "root");
 
 switch ($parts[2]) {
     case "users":
@@ -58,6 +58,11 @@ switch ($parts[2]) {
     case "posts":
         $gateway = new PostGateway($database);
         $controller = new PostController($gateway);
+        break;
+
+    case "comments":
+        $gateway = new CommentGateway($database);
+        $controller = new CommentController($gateway);
         break;
 
     default:
