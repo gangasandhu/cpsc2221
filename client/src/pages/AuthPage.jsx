@@ -35,18 +35,39 @@ const AuthPage = () => {
       // Placeholder for API call
       if (isLogin) {
         // API call to login endpoint
-        console.log("Calling login API with:", formData);
-        // Example: const response = await axios.post('/api/login', { email: formData.email, password: formData.password });
-        // On successful login:
-        setUser({ userID: 123456789, name: "Test", email: formData.email }); // Replace with response data
+        const response = await axios.get("http://localhost/cpsc2221/users");
+        const users = response.data;
+      
+        console.log(formData)
+        // Find the user with matching email and password
+        const matchedUser = users.find(
+          (user) =>
+            user.email.toLowerCase() === formData.email.toLowerCase() &&
+            user.password === formData.password
+        );
+        console.log(matchedUser)
+
+        if (matchedUser) {
+          // On successful login, set user context
+          setUser({
+            userID: matchedUser.userID,
+            name: matchedUser.username,
+            email: matchedUser.email,
+          });
+          alert("Logged in successfully!");
+          navigate("/"); // Redirect to home
+        } else {
+          // Invalid email or password
+          setError("Invalid email or password.");
+        }
       } else {
         // API call to register endpoint
         const id = Math.floor(Math.random() * 1_000_000);
-        console.log("Calling register API with:", {...formData, userID: id, userType: 'member'});
-        const response = await axios.post('http://localhost/cpsc2221/users', {...formData, userID: id, userType: 'member', interest: 'programming', verified: 0});
+        console.log("Calling register API with:", { ...formData, userID: id, userType: 'member' });
+        const response = await axios.post('http://localhost/cpsc2221/users', { ...formData, userID: id, userType: 'member', interest: 'programming', verified: 0 });
         // On successful registration:
         setUser({ userID: id, name: formData.username, email: formData.email }); // Replace with response data
-        
+
       }
 
       navigate("/");

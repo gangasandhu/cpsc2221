@@ -12,7 +12,7 @@ class userGateway
 
     public function getAll(): array
     {
-        $sql = "SELECT userID, username, email, userType
+        $sql = "SELECT userID, username, email, userType, password
                 FROM Users";
 
         $stmt = $this->conn->query($sql);
