@@ -9,36 +9,72 @@ spl_autoload_register(function ($class) {
 set_error_handler("ErrorHandler::handleError");
 set_exception_handler("ErrorHandler::handleException");
 
+// Handle CORS headers
+header("Access-Control-Allow-Origin: *"); // Allow all origins
+header("Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS"); // Allow specific HTTP methods
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Allow specific headers
 header("Content-type: application/json; charset=UTF-8");
+
+// Handle preflight (OPTIONS) requests
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+    http_response_code(204); // No Content
+    exit(0);
+}
 
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
-echo "Connection successful";
+// if ($parts[2] != "users") {
+//     http_response_code(404);
+//     exit;
+// }
 
-if ($parts[1] != "products") {
-    http_response_code(404);
-    exit;
+$id = $parts[3] ?? null;
+
+
+$database = new Database("localhost", "DevLink_db", "root", "root");
+
+switch ($parts[2]) {
+    case "users":
+        $gateway = new userGateway($database);
+        $controller = new UserController($gateway);
+        break;
+
+    case "admin":
+        $gateway = new AdminGateway($database);
+        $controller = new AdminController($gateway);
+        break;
+
+
+    case "member":
+        $gateway = new MemberGateway($database);
+        $controller = new MemberController($gateway);
+        break;
+
+    case "follow":
+        $gateway = new FollowGateway($database);
+        $controller = new FollowController($gateway);
+        break;
+
+    case "posts":
+        $gateway = new PostGateway($database);
+        $controller = new PostController($gateway);
+        break;
+
+    case "comments":
+        $gateway = new CommentGateway($database);
+        $controller = new CommentController($gateway);
+        break;
+
+    case "code":
+        $gateway = new CodeGateway($database);
+        $controller = new CodeController($gateway);
+        break;
+
+    default:
+        http_response_code(404);
+        exit;
+
+
 }
 
-$id = $parts[2] ?? null;
-
-$database = new Database("localhost", "devlink", "root", "");
-
-$gateway = new ProductGateway($database);
-
-$controller = new ProductController($gateway);
-
 $controller->processRequest($_SERVER["REQUEST_METHOD"], $id);
-
-
-
-
-
-
-
-
-
-
-
-
-

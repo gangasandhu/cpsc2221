@@ -1,44 +1,49 @@
-import { useState, useEffect, useParams } from "react";
+import { useState, useEffect } from "react";
 import BlogPost from "../components/BlogPost";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { getPostById } from "../services/postsApi.js";
 
-const ViewPost = () => {
-  const id = useParams();
-  const [post, setPost] = useState({});
+const ViewPost = ({posts}) => {
+  const { id } = useParams();
+ 
+  const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
+
 
   useEffect(() => {
-    // Temporary data for testing
-    const initialPost = {
-      id: 1,
-      user: {
-        name: "User Name 1",
-        username: "@username1",
-        profileImage: "https://cdn-icons-png.flaticon.com/512/8847/8847419.png",
-        isFollowing: false,
-      },
-      content: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis autem necessitatibus nam esse illum.`,
-      timestamp: "12:11 PM • 21/11/2024",
-      views: 987000,
-      engagement: {
-        retweets: 82000,
-        quotes: 45000,
-        likes: 91000,
-        bookmarks: 78000,
-      },
-      actions: {
-        comments: 5,
-        retweets: 5,
-        likes: 25,
-        shares: 0,
-      },
+    
+   
+    const post = getPostById(posts, parseInt(id))
+    setPost(post);
+
+    // Fetch comments for the post from the backend
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(`http://localhost/cpsc2221/comments`);
+        const comments = response.data
+
+        setComments(comments.filter((comment) => comment.postID === parseInt(id)));
+      } catch (error) {
+        console.error("Failed to fetch comments:", error);
+      }
     };
 
-    setPost(initialPost);
-  }, [id]);
+    if (post) {
+      fetchComments();
+    }
+    
+  
+    
+  }, []);
+
+  // TODO: connect to backend
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
-    <div>
-      <h1>hello there</h1>
-      <BlogPost post={post} />
+    <div className="p-6 bg-zinc-100 min-h-screen">
+      {post && <BlogPost post={post} comments={comments} setComments={setComments} />}
     </div>
   );
 };
